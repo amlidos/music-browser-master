@@ -7,12 +7,19 @@ const ArtistList = (props) => (
     <div className="artistList">
         {props.artists.map(artist => {
             return (
-            <div key={artist.id}>
-                <NavLink to={`${props.match.path}/${artist.id}`} >{artist.name}&nbsp;</NavLink>
-            </div>
+                <div key={artist.id}>
+                    <NavLink to={`${props.match.path}/${artist.id}`} >{artist.name}&nbsp;</NavLink>
+                </div>
             )
         })}
-        <Route path="/artists/:id" render={({match}) => <AlbumList {...props} artist={props.artists.find(thisArtist => Number(match.params.id) === thisArtist.id)} />}/>
+        <Route path="/artists/:id" render={({ match }) => {
+            if (props.artists.find(artist => Number(match.params.id) === artist.id)) {
+                return <AlbumList {...match} albums={props.artists.find(artist => Number(match.params.id) === artist.id).albums} />
+            } else {
+                return null;
+            }
+        }
+        } />
     </div>
 );
 
